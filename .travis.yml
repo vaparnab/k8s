@@ -1,0 +1,25 @@
+GNU nano 4.8                     .travis.yml                                sudo: required
+language: generic
+
+services:
+  - docker
+
+before_install:
+  - docker build -t cygnetops/react-test -f ./client/Dockerfile.dev ./client
+
+
+script:
+  - docker run -e CI=true stephengrider/docker-react npm run test
+
+deploy:
+  provider: elasticbeanstalk
+  region: 'ap-south-1'
+  app: 'K8s'
+  env: 'K8s-env'
+  bucket_name: 'elasticbeanstalk-ap-south-1-165842914962'
+  bucket_path: 'K8s'
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
+'
